@@ -20,3 +20,6 @@ mirrorbits enable dotsrc.org
 
 mirrorbits add -http=https://ftp.cc.uoc.gr/mirrors/msys2/ -ftp=ftp://ftp.cc.uoc.gr/mirrors/msys2/ -score 1000 uoc.gr
 mirrorbits enable uoc.gr
+
+mirrorbits add -http=https://mirror.ufro.cl/msys2/ -rsync=rsync://mirror.ufro.cl/msys2/ -score 1000 ufro.cl
+mirrorbits enable ufro.cl
