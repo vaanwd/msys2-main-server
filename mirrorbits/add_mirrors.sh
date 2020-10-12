@@ -3,9 +3,6 @@
 mirrorbits add -http=https://mirror.yandex.ru/mirrors/msys2/ -rsync=rsync://mirror.yandex.ru/mirrors/msys2/ -score 1000 yandex.ru
 mirrorbits enable yandex.ru
 
-mirrorbits add -http=https://repo.msys2.org/ -rsync=rsync://repo.msys2.org/builds/ -score 1 msys2.org
-mirrorbits enable msys2.org
-
 mirrorbits add -http=https://mirror.selfnet.de/msys2/ -rsync=rsync://mirror.selfnet.de/msys2/ -score 1000 selfnet.de
 mirrorbits enable selfnet.de
 
