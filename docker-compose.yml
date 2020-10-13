@@ -77,6 +77,11 @@ services:
       # - "traefik.http.middlewares.add-header.headers.customrequestheaders.X-Forwarded-For=92.248.41.237"
       # - "traefik.http.routers.mirrorbits.middlewares=add-header"
 
+  cron:
+    build: ./cron
+    volumes:
+      - ../msys2:/repo-volume
+
 volumes:
   letsencrypt:
   redis-data:
