@@ -1,24 +1,15 @@
-FROM debian:buster
+FROM ubuntu:focal
 
-ENV DEBIAN_FRONTEND noninteractive
-
-# Update system
-RUN apt-get update && \
-    apt-get -y dist-upgrade && \
+RUN apt-get update -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    pkg-config zlib1g-dev protobuf-compiler libprotoc-dev rsync git make golang && \
     rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
-RUN apt-get update && \
-    apt-get -y install rsync curl && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install mirrorbits
-RUN curl -L https://github.com/etix/mirrorbits/releases/download/v0.5.1/mirrorbits-v0.5.1.tar.gz -o mirrorbits.tar.gz;\
-    tar xvf mirrorbits.tar.gz;\
-    mv mirrorbits/mirrorbits /usr/local/bin/mirrorbits;\
-    ln -s /usr/local/bin/mirrorbits /usr/local/bin/mb;\
-    mkdir -p /usr/local/share/mirrorbits/;\
-    mv mirrorbits/templates/* /usr/local/share/mirrorbits/
+RUN git clone https://github.com/etix/mirrorbits.git && \
+    cd mirrorbits && \
+    git checkout c5f884ed441117b6a1f324998df7eaca421e6d0a && \
+    make install PREFIX=/usr && \
+    cd .. && rm -Rf mirrorbits
 
 COPY init.sh /init.sh
 ENTRYPOINT bash /init.sh
