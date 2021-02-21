@@ -3,6 +3,7 @@ version: '3'
 services:
   reverse-proxy:
     image: traefik:v2.3
+    restart: unless-stopped
     command:
       # - "--api.insecure=true" # for debug interface on 8080
       - "--providers.docker=true"
@@ -24,7 +25,8 @@ services:
       - letsencrypt:/letsencrypt
 
   repo:
-    image: nginx
+    image: nginx:1.19-alpine
+    restart: unless-stopped
     volumes:
       - ../msys2:/usr/share/nginx/html:ro
       - ./repo/nginx.conf:/etc/nginx/conf.d/repo.conf:ro
@@ -36,6 +38,7 @@ services:
 
   rsync:
     build: ./rsync
+    restart: unless-stopped
     volumes:
       - ../msys2:/rsync-volume:ro
       - ./rsync/rsyncd.conf:/etc/rsyncd.conf:ro
@@ -45,14 +48,13 @@ services:
       - "traefik.tcp.routers.rsync.entrypoints=rsync"
 
   redis:
-    image: redis
+    image: redis:6-alpine
+    restart: unless-stopped
     hostname: redis
-    command: --appendonly yes
-    volumes:
-      - redis-data:/data
 
   geoipupdate:
     image: maxmindinc/geoipupdate
+    restart: unless-stopped
     env_file:
         geopip.env
     environment:
@@ -63,6 +65,7 @@ services:
 
   mirrorbits:
     build: ./mirrorbits
+    restart: unless-stopped
     depends_on:
       - redis
       - geoipupdate
@@ -74,15 +77,13 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mirrorbits.rule=Host(`127.0.0.1`)"
-      # - "traefik.http.middlewares.add-header.headers.customrequestheaders.X-Forwarded-For=92.248.41.237"
-      # - "traefik.http.routers.mirrorbits.middlewares=add-header"
 
   cron:
     build: ./cron
+    restart: unless-stopped
     volumes:
       - ../msys2:/repo-volume
 
 volumes:
   letsencrypt:
-  redis-data:
   geoip-data:

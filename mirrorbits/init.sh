@@ -8,6 +8,9 @@ do
     sleep 2
 done
 
+# Throw out the redis db, mirrorbits gets confused easily when adding/removing mirrors
+redis-cli -h redis FLUSHALL
+
 mirrorbits daemon --debug &
 pid=$!
 

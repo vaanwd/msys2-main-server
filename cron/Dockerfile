@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*;
 
 RUN mkdir -p /var/spool/cron/crontabs
-RUN echo '0 * * * * truncate -s0 /repo-volume/trace; date +%s >> /repo-volume/trace' > /var/spool/cron/crontabs/root
+# Every hour..
+RUN echo '0 * * * * truncate -s0 /repo-volume/trace && date +%s >> /repo-volume/trace' > /var/spool/cron/crontabs/root
 
 ENTRYPOINT [ "tini", "--", "busybox", "crond", "-f", "-l", "1", "-L", "/dev/stdout" ]
